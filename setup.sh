@@ -7,52 +7,72 @@ printf "\ninstalling python....\n"
 
 printf "\ngroups being created: admin, hod, faculty, student\n"
 
-pw groupadd admin
-pw groupadd hod
-pw groupadd faculty
-pw groupadd student
+#pw groupadd admin
+#pw groupadd hod
+#pw groupadd faculty
+#pw groupadd student
 
 printf "\nfinished creating groups....\n"
 
 printf "\ntime to add the users.....\n"
 
 
-while true
+
+
+printf "admin username : "
+read username
+#pw user add -n $username -G admin
+
+
+printf "hod username : "
+read username
+#pw user add -n $username -G hod
+
+
+
+
+printf "how many faculty : "
+read num_faculty
+
+printf "how many students : "
+read num_students
+
+mkdir data
+
+# ------ data files creation --------------
+let "i = num_faculty"
+
+while [ $i -gt 0 ]
 do
-	printf "\nSelect the group to which you want to add user to? \n1. admin\n2. hod\n3. faculty\n4. student\n5. stop creating users\n";
-	read option
-	case $option in
-		1)
-			printf "username : "
-			read username
-			pw user add -n $username -G admin
-		;;
-		2)	
-			printf "username : "
-			read username
-			pw user add -n $username -G hod
-		;;
-		3)
-			printf "username : "
-			read username
-			pw user add -n $username -G faculty
-		;;
-		4)
-			printf "username : "
-			read username
-			pw user add -n $username -G student
-		;;
-		5)
-			break
-		;;
-		*)
-			printf "select a valid option\n"
-		;;
-	esac
+	let "j = num_students"
+	while [ $j -gt 0 ]
+	do
+		touch "./data/data$i$j.txt"
+		let "j -= 1"
+	done
+
+	let "i -= 1"
 done
 
+
+
+while [ $num_faculty -gt 0 ]
+do
+	# add user to the faculty group, give permissions to files he can access
+	#pw user add -n "faculty$num_faculty" -G faculty
+	let "num_faculty -= 1"
+done
+
+
+while [ $num_students -gt 0 ]
+do
+	# add user to the student group, give permissions to files he can access
+	#pw user add -n "student$num_students" -G student
+	let "num_students -= 1"
+done
+
+
 # set permissions
-mount -o 
 
 
 
