@@ -6,18 +6,16 @@ printf "\ninstalling python....\n"
 #pkg install python3
 
 
-pw groupadd admin
 pw groupadd hod
 pw groupadd faculty
 pw groupadd student
 
-printf "Groups created : admin, hod, faculty, student.\n"
+printf "Groups created : hod, faculty, student.\n"
 
 # NOTE : while creating users, the corresponding home dirs are not created
 # as there is no use
 
 # force the password to be the same as username
-pw useradd -n admin -g admin -w yes
 
 pw useradd -n hod -g hod -w yes
 
@@ -71,8 +69,7 @@ do
 
 		# Setting permissions for admin and hod here only.
 
-		setfacl -m u:admin:rw- "./data/data$i$j.txt"
-		setfacl -m u:hod:r-- "./data/data$i$j.txt"
+		setfacl -m u:hod:rw- "./data/data$i$j.txt"
 
 		let "j -= 1"
 	done

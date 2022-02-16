@@ -1,13 +1,11 @@
 # TODO : delete all the users without asking for input
 
-pw groupdel -n admin
 pw groupdel -n hod
 pw groupdel -n faculty
 pw groupdel -n student
 
 printf "All the groups are deleted.\n"
 
-pw userdel -n admin
 pw userdel -n hod
 
 printf "how many faculty : "
