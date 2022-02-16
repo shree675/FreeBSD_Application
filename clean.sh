@@ -17,7 +17,6 @@ printf "how many students : "
 read num_students
 
 
-# adding all faculty users to faculty group ,give permissions to files he can access
 let "i = num_faculty"
 while [ $i -gt 0 ]
 do
@@ -26,7 +25,6 @@ do
 	let "i -= 1"
 done
 
-# adding all student users to student group, give permissions to files he can access
 let "i = num_students"
 while [ $i -gt 0 ]
 do
