@@ -5,31 +5,21 @@ printf "\ninstalling python....\n"
 
 #pkg install python3
 
-printf "\ngroups being created: admin, hod, faculty, student\n"
 
-#pw groupadd admin
-#pw groupadd hod
-#pw groupadd faculty
-#pw groupadd student
+pw groupadd admin
+pw groupadd hod
+pw groupadd faculty
+pw groupadd student
 
-printf "\nfinished creating groups....\n"
+printf "Groups created : admin, hod, faculty, student.\n"
 
-printf "\ntime to add the users.....\n"
+# NOTE : while creating users, the corresponding home dirs are not created
+# as there is no use
 
+# force the password to be the same as username
+pw useradd -n admin -g admin -w yes
 
-
-
-printf "admin username : "
-read username
-#pw user add -n $username -G admin
-
-
-printf "hod username : "
-read username
-#pw user add -n $username -G hod
-
-
-
+pw useradd -n hod -g hod -w yes
 
 printf "how many faculty : "
 read num_faculty
@@ -37,9 +27,15 @@ read num_faculty
 printf "how many students : "
 read num_students
 
-mkdir data
+
+
+
+
 
 # ------ data files creation --------------
+
+mkdir data
+
 let "i = num_faculty"
 
 while [ $i -gt 0 ]
@@ -54,28 +50,55 @@ do
 	let "i -= 1"
 done
 
+printf "the data file are created in the \"data\" folder\n"
+
+# ----------------------------------------------------------
 
 
-while [ $num_faculty -gt 0 ]
+
+mount -o acls /dev/ada0s1a
+
+# adding all faculty users to faculty group ,give permissions to files he can access
+let "i = num_faculty"
+while [ $i -gt 0 ]
 do
-	# add user to the faculty group, give permissions to files he can access
-	#pw user add -n "faculty$num_faculty" -G faculty
-	let "num_faculty -= 1"
+	pw useradd -n "faculty$i" -G faculty -w yes
+
+	let "j = num_students"
+	while [ $j -gt 0 ]
+	do
+		setfacl -m u:"faculty$i":rw- "./data/data$i$j.txt"
+
+		# Setting permissions for admin and hod here only.
+
+		setfacl -m u:admin:rw- "./data/data$i$j.txt"
+		setfacl -m u:hod:r-- "./data/data$i$j.txt"
+
+		let "j -= 1"
+	done
+
+	let "i -= 1"
 done
 
-
-while [ $num_students -gt 0 ]
+# adding all student users to student group, give permissions to files he can access
+let "i = num_students"
+while [ $i -gt 0 ]
 do
-	# add user to the student group, give permissions to files he can access
-	#pw user add -n "student$num_students" -G student
-	let "num_students -= 1"
+	pw useradd -n "student$i" -G student -w yes
+
+
+	let "j = num_faculty"
+	while [ $j -gt 0 ]
+	do
+		setfacl -m u:"student$i":r-- "./data/data$j$i.txt"
+
+		let "j -= 1"
+	done
+
+	let "i -= 1"
 done
 
-
-# set permissions
-
-
-
+printf "Created users and set permissions for all the files.\n"
 
 
 
