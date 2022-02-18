@@ -1,14 +1,22 @@
 #define _PROGRAM_NAME "whoami"
+#define MAXLEN 1000
 #include <stdlib.h>
 #include <pwd.h>
 #include <stdio.h>
 #include <grp.h>
 #include <sys/types.h>
 #include <string.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <stdbool.h>
+#include <unistd.h>
 
+struct message_type{
+    long msg_type;
+    char msg_text[MAXLEN];
+} message;
 
-int main()
-{
+int main(){
     printf("\nWelcome to this realtime multi-user application!\n\n" );        
     __uid_t uid = getuid();     //gets the user ID of the user that executed this application
 
@@ -59,12 +67,57 @@ int main()
             break;
         }
     }
+    int studentChoice=0;
+    while(isStudent && !exit){
+        int pid=fork();
+        if(pid>0){
+            printf("Welcome to Application Menu for student. Please enter your choice: \n");
+            printf("1. Exit\n");
+            printf("2. Display your marks\n");
+            printf("3. Echo\n");
+            scanf("%d", &studentChoice);
+            switch(studentChoice){
+                case 1: exit = 1;
+                        break;
+                case 2: printf("Displaying marks...\n");
+                        break;
+                case 3: {
+                    char* temp;
+                    char exitStr[]="exit";
+                    fgets(temp,MAXLEN,stdin);
+                    while(true){
+                        printf("echo> ");
+                        fgets(temp,MAXLEN,stdin);
+                        if(strcmp(temp,exitStr)==0){
+                            break;
+                        }
+                        printf("%s\n",temp);
+                    }
+                }
+                default: 
+                        printf("Please enter a valid option\n");
+            }
+        }
+        else if(pid==0){
+            key_t key;
+            int msgid;
+            key=ftok("application.c",66);
+            // printf("key: %d\n",key);
+            msgid=msgget(key,0666|IPC_CREAT);
+            while(true){
+                msgrcv(msgid,&message,sizeof(message),1,0);
+                printf("\nData received: %s\n",message.msg_text);
+            }
+            msgctl(msgid,IPC_RMID,NULL);
+        }
+    }
     int choice = 0;
     while(isHod && !exit)
     {
         printf("Welcome to Application Menu for HOD. Please enter your choice: \n");
         printf("1. Exit\n");
         printf("2. Display your marks\n");
+        printf("3. Broadcast a message\n");
         scanf("%d", &choice);
         switch(choice)
         {
@@ -72,6 +125,19 @@ int main()
                     break;
             case 2: printf("Displaying marks...\n");
                     break;
+            case 3: {
+                key_t key;
+                int msgid;
+                key=ftok("application.c",66);
+                printf("key: %d\n",key);
+                msgid=msgget(key,0666|IPC_CREAT);
+                char temp[MAXLEN];
+                fgets(temp,MAXLEN,stdin);
+                message.msg_type=1;
+                printf("Enter your message: ");
+                fgets(message.msg_text,MAXLEN,stdin);
+                msgsnd(msgid,&message,sizeof(message),0);
+            }
             default: 
                     printf("Please enter a valid option\n");
         }

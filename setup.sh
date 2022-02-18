@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-printf "\ninstalling python....\n"
+# printf "\ninstalling python....\n"
 
 #pkg install python3
 
@@ -17,7 +17,7 @@ printf "Groups created : hod, faculty, student.\n"
 
 # force the password to be the same as username
 
-pw useradd -n hod -g hod -w yes
+pw useradd -n hod -d /home/hod -g hod -w yes
 
 printf "how many faculty : "
 read num_faculty
