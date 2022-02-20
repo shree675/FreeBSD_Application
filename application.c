@@ -70,7 +70,7 @@ int main(){
     int studentChoice=0;
     while(isStudent && !exit){
         int pid=fork();
-        if(pid>0){
+        if(pid>0){ //parent process i.e. the student interface
             printf("Welcome to Application Menu for student. Please enter your choice: \n");
             printf("1. Exit\n");
             printf("2. Display your marks\n");
@@ -83,7 +83,7 @@ int main(){
                         break;
                 case 3: {
                     char* temp;
-                    char exitStr[]="exit";
+                    char exitStr[]="exit\n";
                     fgets(temp,MAXLEN,stdin);
                     while(true){
                         printf("echo> ");
@@ -98,15 +98,22 @@ int main(){
                         printf("Please enter a valid option\n");
             }
         }
-        else if(pid==0){
+        else if(pid==0){ //child process of student that listens for broadcasted messages
             key_t key;
             int msgid;
-            key=ftok("application.c",66);
+            key=ftok("application.c",66); //66 is just a random number #define it
             // printf("key: %d\n",key);
-            msgid=msgget(key,0666|IPC_CREAT);
+            msgid=msgget(key,0666|IPC_CREAT); //0666 is probably read write no execute permissions
             while(true){
                 msgrcv(msgid,&message,sizeof(message),1,0);
-                printf("\nData received: %s\n",message.msg_text);
+                //printf("\nData received: %s\n",message.msg_text);
+               
+                char message1[MAXLEN], message2[MAXLEN];
+                strcpy(message1, "\nData received:");
+                strcat(message1,message.msg_text);
+                write(STDOUT_FILENO, message1, strlen(message1));
+                strcpy(message2, "\n> ");
+                write(STDOUT_FILENO, message2, strlen(message2));
             }
             msgctl(msgid,IPC_RMID,NULL);
         }
@@ -136,6 +143,8 @@ int main(){
                 message.msg_type=1;
                 printf("Enter your message: ");
                 fgets(message.msg_text,MAXLEN,stdin);
+                msgsnd(msgid,&message,sizeof(message),0);
+                msgsnd(msgid,&message,sizeof(message),0);
                 msgsnd(msgid,&message,sizeof(message),0);
             }
             default: 
