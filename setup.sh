@@ -9,6 +9,7 @@
 pw groupadd hod
 pw groupadd faculty
 pw groupadd student
+pw groupadd all_hfs
 
 printf "Groups created : hod, faculty, student.\n"
 
@@ -17,7 +18,7 @@ printf "Groups created : hod, faculty, student.\n"
 
 # force the password to be the same as username
 
-pw useradd -n hod -d /home/hod -g hod -w yes
+pw useradd -n hod -d /home/hod -g hod -G all_hfs -w yes
 
 printf "how many faculty : "
 read num_faculty
@@ -32,8 +33,17 @@ read num_students
 
 # ------ data files creation --------------
 
-mkdir data
-git init ./data
+mkdir ./data.git
+chgrp all_hfs ./data.git
+git init --bare --shared ./data.git
+
+# cd data
+# printf "1----- 1"
+# git init --bare --shared=group .
+# printf "2----- 2"
+# chgrp -R all_hfs .
+# printf "3----- 3"
+# cd ..
 
 let "i = num_faculty"
 
@@ -68,7 +78,7 @@ mount -o acls /dev/ada0s1a
 let "i = num_faculty"
 while [ $i -gt 0 ]
 do
-	pw useradd -n "faculty$i" -G faculty -w yes
+	pw useradd -n "faculty$i" -G faculty,all_hfs -w yes
 
 	let "j = num_students"
 	while [ $j -gt 0 ]
@@ -91,7 +101,7 @@ let "i = num_students"
 while [ $i -gt 0 ]
 # TODO: option to enter full names of students
 do
-	pw useradd -n "student$i" -G student -w yes
+	pw useradd -n "student$i" -G student,all_hfs -w yes
 
 
 	let "j = num_faculty"
