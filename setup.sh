@@ -33,9 +33,24 @@ read num_students
 
 # ------ data files creation --------------
 
-mkdir ./data.git
-chgrp all_hfs ./data.git
-git init --bare --shared ./data.git
+mkdir data
+
+# chmod 777 .git
+# cd ..
+
+chgrp -R all_hfs data
+cd data
+# git init --shared=group
+git init --shared=0777
+chmod -R g+swX .
+git config user.email "random@gmail.com"
+git config user.name "random"
+
+# mkdir ./data.git
+# chgrp all_hfs .
+# git init --bare --shared .
+# 
+cd ..
 
 # cd data
 # printf "1----- 1"
