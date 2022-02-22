@@ -33,6 +33,7 @@ read num_students
 # ------ data files creation --------------
 
 mkdir data
+git init ./data
 
 let "i = num_faculty"
 
@@ -80,6 +81,7 @@ done
 # adding all student users to student group, give permissions to files he can access
 let "i = num_students"
 while [ $i -gt 0 ]
+# TODO: option to enter full names of students
 do
 	pw useradd -n "student$i" -G student -w yes
 
