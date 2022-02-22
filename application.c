@@ -240,6 +240,9 @@ int main(){
                 printf("Enter the updated marks ");
                 int updated_marks = 0;
                 scanf("%d", &updated_marks);
+                char filename[MAXLEN];
+                sprintf(filename, "./data/data%d%d.txt", faculty_number, updated_marks);
+                printf("Filename, %s\n", filename);
                 FILE *ptr = fopen(filename, "w");
             }
             default: 
