@@ -43,13 +43,19 @@ do
 	while [ $j -gt 0 ]
 	do
 		touch "./data/data$i$j.txt"
+		echo "0" >> "./data/data$i$j.txt"
 		let "j -= 1"
 	done
 
 	let "i -= 1"
 done
 
-printf "the data file are created in the \"data\" folder\n"
+cd data
+git add .
+git commit -m "initializing all data files"
+cd ..
+
+printf "The data files are created in the \"data\" folder\n"
 
 # ----------------------------------------------------------
 
@@ -57,7 +63,8 @@ printf "the data file are created in the \"data\" folder\n"
 
 mount -o acls /dev/ada0s1a
 
-# adding all faculty users to faculty group ,give permissions to files he can access
+# create faculty users, add them to faculty group 
+# give permissions to data files
 let "i = num_faculty"
 while [ $i -gt 0 ]
 do
@@ -78,7 +85,8 @@ do
 	let "i -= 1"
 done
 
-# adding all student users to student group, give permissions to files he can access
+# create student users, add them to student group 
+# give permissions to data files
 let "i = num_students"
 while [ $i -gt 0 ]
 # TODO: option to enter full names of students

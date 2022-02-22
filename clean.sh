@@ -35,8 +35,7 @@ printf "All the users are deleted.\n"
 
 
 
-rm ./data/*.txt
-rmdir data
+rm -r data
 
 printf "All the data is cleaned.\n"
 

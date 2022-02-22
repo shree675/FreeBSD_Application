@@ -176,7 +176,6 @@ int main(){
         }
         int faculty_number = count;
         //printf("Faculty number %d\n\n", faculty_number);
-        int edit_student = 0;
         switch(facultyChoice)
         {
             case 1: exit = 1;
@@ -199,6 +198,7 @@ int main(){
                 msgsnd(msgid,&message,sizeof(message),0);
             }
             case 4: {
+        	int edit_student = 0;
                 // display in a row, all student numbers with names, and their marks given by this faculty
                 // eg. student1 (Mohith)     student2 (Rita)
                 //       89                        34
@@ -209,14 +209,15 @@ int main(){
                     printf("Student no %d\t", i);
                 }
                 printf("\n");
+
+
+                // Displaying the contents of the faculty files.
                 for(int i=1; i<=no_of_students; i++)
                 {
                     char filename[MAXLEN];
                     sprintf(filename, "./data/data%d%d.txt", faculty_number, i);
-                    printf("Filename, %s\n", filename);
-                    //strcat(filename, (char)(faculty_number+'0'));
-                    //strcat(filename, (char)(i+'0'));
-                    //strcat(filename, ".txt");
+                    // printf("Filename, %s\n", filename);
+
                     FILE *ptr = fopen(filename, "r");
                     if(ptr == NULL)
                     {
@@ -225,25 +226,40 @@ int main(){
                     }
                     else
                     {
-                        char ch; 
-                        do{
-                            ch = fgetc(ptr);
-                            printf("%c", ch);
-                        }while(ch != EOF);
+                        char ch = fgetc(ptr);
+			while(ch != EOF && ch != '\n'){
+				printf("%c", ch);	
+				ch = fgetc(ptr);
+			}
                     }
                     fclose(ptr);
                     printf("\t\t");
                 }
-                printf("Enter the student number whose marks you want to edit: ");
+
+                printf("\nEnter the student number whose marks you want to edit: ");
                 scanf("%d", &edit_student);
-                printf("Student number chosen is %d", edit_student);
-                printf("Enter the updated marks ");
+                // printf("Student number chosen is %d\n", edit_student);
+
+
+                printf("\nEnter the updated marks : ");
                 int updated_marks = 0;
                 scanf("%d", &updated_marks);
+
+		// getting the filename
                 char filename[MAXLEN];
-                sprintf(filename, "./data/data%d%d.txt", faculty_number, updated_marks);
-                printf("Filename, %s\n", filename);
+                sprintf(filename, "./data/data%d%d.txt", faculty_number, edit_student);
+                // printf("Filename, %s\n", filename);
+
+
+		// writing the updated marks to the file
                 FILE *ptr = fopen(filename, "w");
+		if(ptr == NULL){
+			printf("file could not be opened\n");
+		}
+		fprintf(ptr, "%d", updated_marks);
+		fclose(ptr);
+		char *command_add = "cd data && git add . && git commit -m \"updated data file\" && cd ..";
+		popen(command_add, "r");
             }
             default: 
                     printf("Please enter a valid option\n");
