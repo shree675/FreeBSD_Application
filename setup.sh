@@ -9,7 +9,7 @@
 pw groupadd hod
 pw groupadd faculty
 pw groupadd student
-pw groupadd all_hfs
+pw groupadd all_hfs # TODO: Remove this group
 
 printf "Groups created : hod, faculty, student.\n"
 
@@ -27,10 +27,6 @@ printf "how many students : "
 read num_students
 
 
-
-
-
-
 # ------ data files creation --------------
 
 
@@ -44,8 +40,6 @@ read num_students
 #chmod -R g+swX .
 mkdir data
 cd data
-
-
 
 let "i = num_faculty"
 
@@ -66,10 +60,10 @@ do
 		# deny access for others
 		chmod -R 640 . 
 
-		echo "0" >> "data$i$j.txt"
+		echo "0" > "data$i$j.txt"
 		git add .
 		git commit -m "Initializing data$i$j file."
-		cd .git
+		cd .git  # TODO remove this cd .git and the corresponding cd ..
 		# chmod 664 COMMIT_EDITMSG
 
 		cd ..
@@ -88,7 +82,7 @@ printf "The data files are created in the \"data\" folder\n"
 # ----------------------------------------------------------
 
 
-
+# TODO: make this NON hardcoded
 mount -o acls /dev/ada0s1a
 
 # create faculty users, add them to faculty group 
@@ -105,7 +99,8 @@ do
 		setfacl -m u:"faculty$i":rw- "./data/data$i$j/data$i$j.txt"
 
 		# Setting permissions for admin and hod here only.
-
+		# TODO Need to set properly for hod
+		setfacl -R -m u:hod:rwx "./data/data$i$j/"
 		setfacl -m u:hod:rw- "./data/data$i$j/data$i$j.txt"
 
 		let "j -= 1"
@@ -126,6 +121,8 @@ do
 	let "j = num_faculty"
 	while [ $j -gt 0 ]
 	do
+		# TODO: Set for the folder for students - mostly not required
+		setfacl -m u:"student$i":r-x "./data/data$j$i"
 		setfacl -m u:"student$i":r-- "./data/data$j$i/data$j$i.txt"
 
 		let "j -= 1"
