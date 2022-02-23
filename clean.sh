@@ -3,6 +3,7 @@
 pw groupdel -n hod
 pw groupdel -n faculty
 pw groupdel -n student
+pw groupdel -n all_hfs
 
 printf "All the groups are deleted.\n"
 

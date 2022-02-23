@@ -33,32 +33,19 @@ read num_students
 
 # ------ data files creation --------------
 
-mkdir data
 
 # chmod 777 .git
 # cd ..
 
-chgrp -R all_hfs data
+# chgrp -R all_hfs data/.git
+#git init --shared=group
+#chgrp -R all_hfs .git
+#git init --shared=0777
+#chmod -R g+swX .
+mkdir data
 cd data
-# git init --shared=group
-git init --shared=0777
-chmod -R g+swX .
-git config user.email "random@gmail.com"
-git config user.name "random"
 
-# mkdir ./data.git
-# chgrp all_hfs .
-# git init --bare --shared .
-# 
-cd ..
 
-# cd data
-# printf "1----- 1"
-# git init --bare --shared=group .
-# printf "2----- 2"
-# chgrp -R all_hfs .
-# printf "3----- 3"
-# cd ..
 
 let "i = num_faculty"
 
@@ -67,17 +54,33 @@ do
 	let "j = num_students"
 	while [ $j -gt 0 ]
 	do
-		touch "./data/data$i$j.txt"
-		echo "0" >> "./data/data$i$j.txt"
+
+		mkdir "data$i$j"
+		chmod 655 "data$i$j"
+
+		cd "data$i$j"
+		git init --shared=group
+		git config user.email "user@gmail.com"
+		git config user.name "user"
+		touch "data$i$j.txt"
+		# deny access for others
+		chmod -R 640 . 
+
+		echo "0" >> "data$i$j.txt"
+		git add .
+		git commit -m "Initializing data$i$j file."
+		cd .git
+		# chmod 664 COMMIT_EDITMSG
+
+		cd ..
+		cd ..
+
 		let "j -= 1"
 	done
 
 	let "i -= 1"
 done
 
-cd data
-git add .
-git commit -m "initializing all data files"
 cd ..
 
 printf "The data files are created in the \"data\" folder\n"
@@ -98,11 +101,12 @@ do
 	let "j = num_students"
 	while [ $j -gt 0 ]
 	do
-		setfacl -m u:"faculty$i":rw- "./data/data$i$j.txt"
+		setfacl -R -m u:"faculty$i":rwx "./data/data$i$j"
+		setfacl -m u:"faculty$i":rw- "./data/data$i$j/data$i$j.txt"
 
 		# Setting permissions for admin and hod here only.
 
-		setfacl -m u:hod:rw- "./data/data$i$j.txt"
+		setfacl -m u:hod:rw- "./data/data$i$j/data$i$j.txt"
 
 		let "j -= 1"
 	done
@@ -122,7 +126,7 @@ do
 	let "j = num_faculty"
 	while [ $j -gt 0 ]
 	do
-		setfacl -m u:"student$i":r-- "./data/data$j$i.txt"
+		setfacl -m u:"student$i":r-- "./data/data$j$i/data$j$i.txt"
 
 		let "j -= 1"
 	done

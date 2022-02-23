@@ -161,10 +161,12 @@ int main(){
         printf("2. Display your marks\n");
         printf("3. Broadcast a message\n");
         printf("4. Edit marks table\n");
+        printf("5. Undo\n");
         // each faculty is a row, each student is a column
         scanf("%d", &facultyChoice);
+	// TODO : hardcoded it, we need to change it!
         int no_of_students = 2;
-        char buffer[120]; 
+        char buffer[MAXLEN]; 
         strcpy(buffer, pw->pw_name);
         int username_length = strlen(buffer);
         int count = 0;
@@ -215,8 +217,8 @@ int main(){
                 for(int i=1; i<=no_of_students; i++)
                 {
                     char filename[MAXLEN];
-                    sprintf(filename, "./data/data%d%d.txt", faculty_number, i);
-                    // printf("Filename, %s\n", filename);
+                    sprintf(filename, "./data/data%d%d/data%d%d.txt", faculty_number, i, faculty_number, i);
+                    //printf("Filename :  %s\n", filename);
 
                     FILE *ptr = fopen(filename, "r");
                     if(ptr == NULL)
@@ -247,7 +249,7 @@ int main(){
 
 		// getting the filename
                 char filename[MAXLEN];
-                sprintf(filename, "./data/data%d%d.txt", faculty_number, edit_student);
+                sprintf(filename, "./data/data%d%d/data%d%d.txt", faculty_number, edit_student, faculty_number, edit_student);
                 // printf("Filename, %s\n", filename);
 
 
@@ -258,9 +260,88 @@ int main(){
 		}
 		fprintf(ptr, "%d", updated_marks);
 		fclose(ptr);
-		char *command_add = "cd data && git add . && git commit -m \"updated data file\" && cd ..";
+
+		char command_add[MAXLEN];
+
+		sprintf(
+			command_add, 
+			"cd data/data%d%d/ && git add data%d%d.txt && git commit -m \"updated data file\" && cd .. && cd ..",
+			faculty_number, 
+			edit_student,
+			faculty_number, 
+			edit_student
+		);
+		
+
 		popen(command_add, "r");
+
+		break;
             }
+	    case 5:{
+
+        	int edit_student = 0;
+                // display in a row, all student numbers with names, and their marks given by this faculty
+                // eg. student1 (Mohith)     student2 (Rita)
+                //       89                        34
+                // Enter the student no whos marks you want to edit:
+                // TODO: get names of students and number of students - either from system calls or a meta data file
+                for(int i=1; i<=no_of_students; i++)
+                {
+                    printf("Student no %d\t", i);
+                }
+                printf("\n");
+
+
+                // Displaying the contents of the faculty files.
+                for(int i=1; i<=no_of_students; i++)
+                {
+                    char filename[MAXLEN];
+                    sprintf(filename, "./data/data%d%d/data%d%d.txt", faculty_number, i, faculty_number, i);
+                    // printf("Filename, %s\n", filename);
+
+                    FILE *ptr = fopen(filename, "r");
+                    if(ptr == NULL)
+                    {
+                        printf("File could not be opened");
+
+                    }
+                    else
+                    {
+                        char ch = fgetc(ptr);
+			while(ch != EOF && ch != '\n'){
+				printf("%c", ch);	
+				ch = fgetc(ptr);
+			}
+                    }
+                    fclose(ptr);
+                    printf("\t\t");
+                }
+
+                printf("\nEnter the student number whose marks you want to undo: ");
+                scanf("%d", &edit_student);
+                // printf("Student number chosen is %d\n", edit_student);
+
+
+
+		// getting the filename
+                char filename[MAXLEN];
+                sprintf(filename, "./data/data%d%d/data%d%d.txt", faculty_number, edit_student, faculty_number, edit_student);
+                // printf("Filename, %s\n", filename);
+
+
+		char command_add[MAXLEN];
+
+		sprintf(
+			command_add, 
+			"cd data/data%d%d && git revert HEAD --no-edit && cd .. && cd ..",
+			faculty_number,
+			edit_student
+		);
+		
+
+		popen(command_add, "r");
+		break;
+	    }
             default: 
                     printf("Please enter a valid option\n");
         }
