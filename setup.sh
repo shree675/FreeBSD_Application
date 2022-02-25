@@ -9,7 +9,7 @@
 pw groupadd hod
 pw groupadd faculty
 pw groupadd student
-pw groupadd all_hfs # TODO: Remove this group
+pw groupadd all_hfs 
 
 printf "Groups created : hod, faculty, student.\n"
 
@@ -18,7 +18,7 @@ printf "Groups created : hod, faculty, student.\n"
 
 # force the password to be the same as username
 
-pw useradd -n hod -d /home/hod -g hod -G all_hfs -w yes
+pw useradd -n hod -G all_hfs -w yes
 
 printf "how many faculty : "
 read num_faculty
@@ -29,15 +29,6 @@ read num_students
 
 # ------ data files creation --------------
 
-
-# chmod 777 .git
-# cd ..
-
-# chgrp -R all_hfs data/.git
-#git init --shared=group
-#chgrp -R all_hfs .git
-#git init --shared=0777
-#chmod -R g+swX .
 mkdir data
 cd data
 
@@ -50,7 +41,9 @@ do
 	do
 
 		mkdir "data$i$j"
-		chmod 655 "data$i$j"
+
+		# This is being over-written by the following permissions (640)
+		# chmod 655 "data$i$j"
 
 		cd "data$i$j"
 		git init --shared=group
@@ -63,10 +56,7 @@ do
 		echo "0" > "data$i$j.txt"
 		git add .
 		git commit -m "Initializing data$i$j file."
-		cd .git  # TODO remove this cd .git and the corresponding cd ..
-		# chmod 664 COMMIT_EDITMSG
 
-		cd ..
 		cd ..
 
 		let "j -= 1"
@@ -82,8 +72,9 @@ printf "The data files are created in the \"data\" folder\n"
 # ----------------------------------------------------------
 
 
-# TODO: make this NON hardcoded
-mount -o acls /dev/ada0s1a
+disk_name=`mount | head -n1 | awk '{printf $1;}'`
+
+mount -o acls $disk_name
 
 # create faculty users, add them to faculty group 
 # give permissions to data files
@@ -99,7 +90,6 @@ do
 		setfacl -m u:"faculty$i":rw- "./data/data$i$j/data$i$j.txt"
 
 		# Setting permissions for admin and hod here only.
-		# TODO Need to set properly for hod
 		setfacl -R -m u:hod:rwx "./data/data$i$j/"
 		setfacl -m u:hod:rw- "./data/data$i$j/data$i$j.txt"
 
@@ -111,24 +101,27 @@ done
 
 # create student users, add them to student group 
 # give permissions to data files
-let "i = num_students"
-while [ $i -gt 0 ]
-# TODO: option to enter full names of students
+let "temp_i = num_students"
+while [ $temp_i -gt 0 ]
 do
-	pw useradd -n "student$i" -G student,all_hfs -w yes
+	let "i = $num_students - $temp_i + 1"
+
+	printf "Enter student$i's full name : "
+	read full_name
+
+	pw useradd -n "student$i" -G student,all_hfs -w yes -c $full_name
 
 
 	let "j = num_faculty"
 	while [ $j -gt 0 ]
 	do
-		# TODO: Set for the folder for students - mostly not required
 		setfacl -m u:"student$i":r-x "./data/data$j$i"
 		setfacl -m u:"student$i":r-- "./data/data$j$i/data$j$i.txt"
 
 		let "j -= 1"
 	done
 
-	let "i -= 1"
+	let "temp_i -= 1"
 done
 
 printf "Created users and set permissions for all the files.\n"
