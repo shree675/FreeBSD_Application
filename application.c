@@ -6,7 +6,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#define MAX_LEN 1000
 #define MAX_GROUPS 10
 
 enum userType {

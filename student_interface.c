@@ -12,10 +12,6 @@
 #define MAX_MARKS 100
 #define MIN_MARKS 0
 
-void exit_program(int signum) {
-  exit(1);
-}
-
 int main(int argc, char *argv[]) {
   // char *username = argv[1];
   char *username = "student1";
@@ -34,15 +30,17 @@ int main(int argc, char *argv[]) {
 
   if (fork()) {
     //   parent: display the interface here
-    sa.sa_handler = exit_program;
+    sa.sa_handler = exit;
     sigaction(SIGINT, &sa, NULL);
+
+    int shouldExit = 1;
     while (1) {
 
       printf("\n\nWelcome to Application Menu for student. Please enter your "
              "choice: \n");
       printf("1. Display your marks\n");
       printf("2. Display Marks Statistics\n");
-      printf("[Press Ctrl + C to exit]\n");
+      printf("[Press Ctrl + C or enter something else to exit]\n");
       printf("> ");
 
       int student_choice = 0;
@@ -52,9 +50,6 @@ int main(int argc, char *argv[]) {
       case 1: {
         printf("Displaying marks...\n");
         printf("\nMarks awarded by evaluators. (evaluator names hidden)\n");
-
-        // Consider randomizing the order of display in every run, even though
-        // faculty name is already hidden
 
         // Displaying the contents of the student files.
         for (int i = 1; i <= num_faculty; i++) {
@@ -111,8 +106,10 @@ int main(int argc, char *argv[]) {
                "------------------------------------\n");
         break;
       }
+      case 0:
       default:
-        printf("Please enter a valid option!");
+        printf("Please enter a valid option!\n");
+        exit(1);
       }
     }
 
