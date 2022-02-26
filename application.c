@@ -7,6 +7,10 @@
 #include <unistd.h>
 
 #define MAX_GROUPS 10
+#define MAX_MARKS 100
+#define MIN_MARKS 0
+
+void *log_history(FILE *fp); //Function to format and print Version history
 
 enum userType {
   faculty = 0,
@@ -203,11 +207,26 @@ int main() {
     }
     case 4: {
       printf("Displaying Overall Statistics\n");
+
       // Displaying the contents of all files
       int sum = 0;
-      int max = -1;
-      int min = 10000;
+      int max = MIN_MARKS;
+      int min = MAX_MARKS;
+      int student_sum[num_students];
+      int student_min[num_students];
+      int student_max[num_students];
+      for(int i=0; i<num_students; i++) {
+        student_sum[i] = 0;
+        student_max[i] = MIN_MARKS;
+        student_min[i] = MAX_MARKS;
+      }
+      printf("\t\t");
+      for (int i = 1; i <= num_students; i++) {
+        printf("Student %d | ", i);
+      }
+      printf("\n");
       for (int i = 1; i <= num_faculty; i++) {
+        printf("Faculty %d:  \t", i);
         for (int j = 1; j <= num_students; j++) {
           char filename[MAX_LEN];
           sprintf(filename, "./data/data%d%d/data%d%d.txt", i, j, i, j);
@@ -228,6 +247,9 @@ int main() {
             max = (mark > max) ? mark : max;
             min = (mark < min) ? mark : min;
             sum += mark;
+            student_max[j-1] = (mark > student_max[j-1]) ? mark : student_max[j-1];
+            student_min[j-1] = (mark < student_min[j-1]) ? mark : student_min[j-1];
+            student_sum[j-1] += mark;
           }
           fclose(ptr);
           printf("\t\t");
@@ -236,8 +258,27 @@ int main() {
       }
       printf("\n---------------------------------------------------------------"
              "----------------------------------\n");
+      printf("Student-wise:\t\t");
+      for (int i = 1; i <= num_students; i++) {
+        printf("Student %d  |  ", i);
+      }
+      printf("\nAverage\t\t");
+      for (int i = 0; i < num_students; i++) {
+        printf("\t%.2f  \t", (float)student_sum[i]/num_faculty);
+      }
+      printf("\nMinimum\t\t");
+      for (int i = 0; i < num_students; i++) {
+        printf("\t%d\t", student_min[i]);
+      }
+      printf("\nMaximum\t\t");
+      for (int i = 0; i < num_students; i++) {
+        printf("\t%d\t", student_max[i]);
+      }
+
+      printf("\n---------------------------------------------------------------"
+             "----------------------------------\n");
       printf("Total of all scores: %d\n", sum);
-      printf("Average of all scores: %f\n",
+      printf("Average of all scores: %.2f\n",
              (float)sum / (num_students * num_faculty));
       printf("Maximum score is %d and Minimum score is %d\n", max, min);
       printf("\n---------------------------------------------------------------"
@@ -470,9 +511,16 @@ int main() {
               faculty_number, edit_student, faculty_number, edit_student);
 
       FILE *p = popen(command_view, "r");
-      char log_message[MAX_LEN];
-      fscanf(p, "%s", log_message);
-      printf("The Version history of file is as follows: \n %s\n", log_message);
+      log_history(p);
+
+      /* char ch = fgetc(p);
+      while (ch != EOF) {
+        printf("%c", ch);
+        ch = fgetc(p);
+      } */
+      //char log_message[MAX_LEN];
+      //fscanf(p, "%s", log_message);
+      //printf("The Version history of file is as follows: \n %s\n", log_message);
       pclose(p);
       popen("cd .. && cd ..", "r");
 

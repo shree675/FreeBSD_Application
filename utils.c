@@ -38,6 +38,23 @@ char *read_file(char *file_name) {
   return contents;
 }
 
+void *log_history(FILE *fp) {
+  printf("||Printing the version history||\n\nLatest Version\n");
+  char *contents = malloc(MAX_CHARACTERS_IN_FILE * sizeof(char));
+  while(fscanf(fp, "%[^\n] ", contents)!=EOF) {
+    if(contents[0] && (contents[0] == '+' || contents[0] == '-')) {
+      if(contents[1] && (contents[1] == '+' || contents[1] == '-'))
+        printf("---------------------------------------------\n");
+      else
+        printf("> %s\n", contents);
+    }
+  }
+  printf("Oldest Version\n");
+  printf("---------------------------------------------\n");
+  fclose(fp);
+  return NULL;
+}
+
 char **get_marks(int student_number, int num_faculty) {
   // TODO: Fix this
 
