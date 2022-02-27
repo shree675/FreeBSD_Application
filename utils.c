@@ -38,6 +38,13 @@ char *read_file(char *file_name) {
   return contents;
 }
 
+void empty_stdin() {
+    int c = getchar();
+
+    while (c != '\n' && c != EOF)
+        c = getchar();
+}
+
 void *log_history(FILE *fp) {
   printf("||Printing the version history||\n\nLatest Version\n");
   char *contents = malloc(MAX_CHARACTERS_IN_FILE * sizeof(char));

@@ -124,7 +124,25 @@ do
 	let "temp_i -= 1"
 done
 
+# --------------------Creating named pipes------------------
+
+mkdir pipes
+
+let "i = num_students"
+while [ $i -gt 0 ]
+do
+	mkfifo "pipes/p_student$i"
+
+	setfacl -m u:"student$i":rw- "pipes/p_student$i"
+	setfacl -m u:"hod":rw- "pipes/p_student$i"
+
+	let "i -= 1"
+done
+
+
+
+
+# ----------------------------------------------------------
+
+
 printf "Created users and set permissions for all the files.\n"
-
-
-

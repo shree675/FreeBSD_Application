@@ -6,16 +6,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/event.h>
-#include <unistd.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
 #define MAX_MARKS 100
 #define MIN_MARKS 0
 
 int main(int argc, char *argv[]) {
-  // char *username = argv[1];
-  char *username = "student1";
-  int username_length = strlen(username);
+  char *username = argv[0];
+  const int username_length = strlen(username);
 
   int student_number = 0;
   for (int i = username_length - 1; i >= 7; i--) {
@@ -24,23 +23,21 @@ int main(int argc, char *argv[]) {
 
   const int num_faculty = get_num_users_in_group("faculty");
 
-  struct sigaction sa = {0};
-  sa.sa_handler = sigint_handler;
-  sigaction(SIGINT, &sa, NULL);
-
   if (fork()) {
-    //   parent: display the interface here
-    sa.sa_handler = exit;
+
+    struct sigaction sa = {0};
+    sa.sa_handler = sigint_handler;
     sigaction(SIGINT, &sa, NULL);
 
-    int shouldExit = 1;
+    //   parent: display the interface here
+    printf("\n\nWelcome to Application Menu for student. Please enter your "
+           "choice: \n");
+
     while (1) {
 
-      printf("\n\nWelcome to Application Menu for student. Please enter your "
-             "choice: \n");
       printf("1. Display your marks\n");
       printf("2. Display Marks Statistics\n");
-      printf("[Press Ctrl + C or enter something else to exit]\n");
+      printf("[Press Ctrl + C exit]\n");
       printf("> ");
 
       int student_choice = 0;
@@ -101,7 +98,8 @@ int main(int argc, char *argv[]) {
                "------------------------------------\n");
         printf("Total of all scores: %d\n", sum);
         printf("Average of all scores: %f\n", (float)sum / num_faculty);
-        printf("Maximum score is %d and Minimum score is %d\n", max, min);
+        printf("Maximum score is %d\n", max);
+        printf("Minimum score is %d\n", min);
         printf("\n-------------------------------------------------------------"
                "------------------------------------\n");
         break;
@@ -109,7 +107,7 @@ int main(int argc, char *argv[]) {
       case 0:
       default:
         printf("Please enter a valid option!\n");
-        exit(1);
+        empty_stdin();
       }
     }
 
@@ -119,21 +117,20 @@ int main(int argc, char *argv[]) {
     //   child: handle the triggers that occur
     //   when the pipe is written to
 
-    char contents[MAX_LEN];
-    char named_pipe[MAX_LEN];
-
-    sprintf(named_pipe, "p_%s", username);
-
     struct kevent event;  /* Event we want to monitor */
     struct kevent tevent; /* Event triggered */
     int kq, fd, ret;
 
+    char named_pipe[MAX_LEN];
+    sprintf(named_pipe, "pipes/p_%s", username);
     fd = open(named_pipe, O_RDWR);
 
     /* Create kqueue. */
     kq = kqueue();
     if (kq == -1)
       err(EXIT_FAILURE, "kqueue() failed");
+
+    // int *data = 0;
 
     /* Initialize kevent structure. */
     EV_SET(&event, fd, EVFILT_READ, EV_ADD | EV_CLEAR, NOTE_WRITE, 0, NULL);
@@ -150,8 +147,9 @@ int main(int argc, char *argv[]) {
       if (ret == -1) {
         err(EXIT_FAILURE, "kevent wait");
       } else if (ret > 0) {
+        char contents[MAX_LEN];
         read(fd, contents, MAX_LEN);
-        printf("%s\n", contents);
+        write(STDOUT_FILENO, contents, strlen(contents));
       }
     }
     close(fd);

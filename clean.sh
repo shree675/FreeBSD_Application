@@ -38,5 +38,7 @@ printf "All the users are deleted.\n"
 
 rm -r data
 
+rm -r pipes
+
 printf "All the data is cleaned.\n"
 
