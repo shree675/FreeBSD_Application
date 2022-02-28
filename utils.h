@@ -6,6 +6,14 @@
 #define MAX_LEN 1000
 #define MAX_MARKS 100
 #define MIN_MARKS 0
+#define MAX_GROUPS 10
+
+enum userType {
+  faculty = 0,
+  hod = 1,
+  student = 2,
+  unknown = -1,
+};
 
 
 int get_num_users_in_group(char *);

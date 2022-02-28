@@ -139,10 +139,10 @@ do
 	let "i -= 1"
 done
 
-
-
-
 # ----------------------------------------------------------
+
+touch marks.csv
+setfacl -m u:hod:rw- marks.csv
 
 
 printf "Created users and set permissions for all the files.\n"

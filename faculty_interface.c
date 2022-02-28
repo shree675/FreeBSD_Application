@@ -31,7 +31,6 @@ int main(int argc, char *argv[]) {
     printf("2. Edit marks table\n");
     printf("3. Undo edit operation\n");
     printf("4. View version history\n");
-    // printf("5. Broadcast a message\n"); // TODO: remove this
     printf("[Press Ctrl + C exit]\n");
     printf("> ");
 
@@ -41,6 +40,19 @@ int main(int argc, char *argv[]) {
     switch (faculty_choice) {
     case 1:
       printf("Displaying marks...\n");
+      for (int i = 1; i <= num_students; i++) {
+        printf("student%d  ", i);
+      }
+      printf("\n");
+      for (int i = 1; i <= num_students; i++) {
+        char filename[MAX_LEN];
+        sprintf(filename,"data/data%d%d/data%d%d.txt", faculty_number, i, faculty_number, i);
+        FILE *fp = fopen(filename, "r");
+        int marks;
+        fscanf(fp, "%d", &marks);
+        printf("   %d     ", marks);
+      }
+      printf("\n");
       break;
     
     case 2: {
@@ -215,23 +227,6 @@ int main(int argc, char *argv[]) {
 
       break;
     }
-    // case 5: {
-      // int fd;
-      // char named_pipe[MAX_LEN];
-      // char message[MAX_LEN];
-      // write(STDOUT_FILENO, "Enter the message: ", 19);
-      // empty_stdin();
-      // fgets(message, MAX_LEN, stdin);
-
-      // for (int i = 0; i < num_students; i++) {
-      //   sprintf(named_pipe, "p_student%d", i);
-      //   fd = open(named_pipe, O_RDWR);
-
-      //   write(fd, message, strlen(message));
-      //   close(fd);
-      // }
-      // break;
-    // }
     default:
       printf("Please enter a valid option!\n");
       empty_stdin();

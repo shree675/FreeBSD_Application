@@ -7,17 +7,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#define MAX_GROUPS 10
-
-enum userType {
-  faculty = 0,
-  hod = 1,
-  student = 2,
-  unknown = -1,
-};
-
-// Need to do error handling
-
 int main() {
 
   printf("\nWelcome to this realtime multi-user application!\n\n");
@@ -52,15 +41,12 @@ int main() {
     }
 
     if (strcmp(gr->gr_name, "student") == 0) {
-      // printf("student group detected\n");
       user = student;
       break;
     } else if (strcmp(gr->gr_name, "faculty") == 0) {
-      // printf("faculty group detected\n");
       user = faculty;
       break;
     } else if (strcmp(gr->gr_name, "hod") == 0) {
-      // printf("hod group detected\n");
       user = hod;
       break;
     }
@@ -89,6 +75,7 @@ int main() {
     };
   }
 
+  // Command line application for hod user
   if (user == hod) {
     if (execl("hod_interface", "", NULL) == -1) {
       perror("In hod execl : ");
@@ -96,6 +83,7 @@ int main() {
     };
   }
 
+  // Command line application for faculty user
   if (user == faculty) {
     if (execl("faculty_interface", username, NULL) == -1) {
       perror("In faculty execl : ");

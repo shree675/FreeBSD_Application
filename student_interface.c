@@ -66,6 +66,7 @@ int main(int argc, char *argv[]) {
             fscanf(ptr, "%s", contents);
             printf("%s\t", contents);
           }
+          printf("\n");
           fclose(ptr);
         }
         break;

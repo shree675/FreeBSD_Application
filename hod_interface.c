@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
     printf("2. Edit Marks\n");              // needs to be implemented
     printf("3. View Overall Statistics\n"); // needs to be implemented
     printf("4. Broadcast a message\n");
+    printf("5. Export all the marks as a csv\n");
     printf("[Press Ctrl + C exit]\n");
     printf("> ");
 
@@ -41,7 +42,6 @@ int main(int argc, char *argv[]) {
         for (int j = 1; j <= num_students; j++) {
           char filename[MAX_LEN];
           sprintf(filename, "./data/data%d%d/data%d%d.txt", i, j, i, j);
-          // printf("Filename :  %s\n", filename);
           FILE *ptr = fopen(filename, "r");
           if (ptr == NULL) {
             printf("File could not be opened");
@@ -77,7 +77,6 @@ int main(int argc, char *argv[]) {
         for (int j = 1; j <= num_students; j++) {
           char filename[MAX_LEN];
           sprintf(filename, "./data/data%d%d/data%d%d.txt", i, j, i, j);
-          // printf("Filename :  %s\n", filename);
           FILE *ptr = fopen(filename, "r");
           if (ptr == NULL) {
             printf("File could not be opened");
@@ -153,7 +152,6 @@ int main(int argc, char *argv[]) {
         for (int j = 1; j <= num_students; j++) {
           char filename[MAX_LEN];
           sprintf(filename, "./data/data%d%d/data%d%d.txt", i, j, i, j);
-          // printf("Filename :  %s\n", filename);
           FILE *ptr = fopen(filename, "r");
           if (ptr == NULL) {
             printf("File could not be opened");
@@ -166,7 +164,6 @@ int main(int argc, char *argv[]) {
               mark = mark * 10 + (int)(ch - '0');
               ch = fgetc(ptr);
             }
-            // marks[i] = mark;
             max = (mark > max) ? mark : max;
             min = (mark < min) ? mark : min;
             sum += mark;
@@ -217,7 +214,6 @@ int main(int argc, char *argv[]) {
       write(STDOUT_FILENO, "Enter the message: ", 19);
       empty_stdin();
       fgets(message, MAX_LEN, stdin);
-    //   strcat(message, "");
 
       for (int i = 0; i < num_students; i++) {
         sprintf(named_pipe, "pipes/p_student%d", i);
@@ -225,6 +221,47 @@ int main(int argc, char *argv[]) {
         write(fd, message, strlen(message) + 1);
         close(fd);
       }
+      break;
+    }
+    case 5: {
+      char output[MAX_LEN] = "marks.csv";
+      printf("Enter the output file name: ");
+      scanf("%s", output);
+      FILE *output_file = fopen(output, "w");
+      if (output_file == NULL) {
+        perror("Cannot write to file: ");
+        printf("Defaulting to marks.csv file");
+        strcpy(output, "marks.csv");
+      }
+
+      char marks_file_name[MAX_LEN];
+      FILE *marks_file;
+
+      char header[MAX_LEN] = "";
+
+      fprintf(output_file, "faculty_name,");
+      for (int i = 1; i <= num_students; i++) {
+        char student_name[MAX_LEN];
+        sprintf(student_name, "student%d,", i);
+        strcat(header, student_name);
+      }
+      fprintf(output_file, "%s\n", header);
+
+      char row[MAX_LEN] = "";
+      int marks;
+      for (int i = 1; i <= num_faculty; i++) {
+        fprintf(output_file, "faculty%d,", i);
+        for (int j = 1; j <= num_students; j++) {
+          sprintf(marks_file_name, "./data/data%d%d/data%d%d.txt", i, j, i, j);
+          marks_file = fopen(marks_file_name, "r");
+          fscanf(marks_file, "%d", &marks);
+          fprintf(output_file, "%d,", marks);
+          fclose(marks_file);
+        }
+        fprintf(output_file, "\n");
+      }
+      fclose(output_file);
+      printf("Saved marks in %s successfully\n", output);
       break;
     }
     default:

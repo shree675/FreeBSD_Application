@@ -2,7 +2,7 @@ install: utils.c application.c faculty_interface.c student_interface.c
 	make student
 	make faculty
 	make hod
-	gcc -o application application.c utils.c
+	gcc -o application application.c utils.c -g
 
 setup: setup.sh
 	sudo bash setup.sh
@@ -18,3 +18,4 @@ hod:
 
 clean: clean.sh
 	sudo ./clean.sh
+	rm application student_interface hod_interface faculty_interface
