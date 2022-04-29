@@ -10,6 +10,7 @@ int main(int argc, char *argv[]) {
   struct sigaction sa = {0};
   sa.sa_handler = sigint_handler;
   sigaction(SIGINT, &sa, NULL);
+  // sigaction(0, &sa, NULL);
 
   const int num_students = get_num_users_in_group("student");
   const int num_faculty = get_num_users_in_group("faculty");
@@ -215,7 +216,7 @@ int main(int argc, char *argv[]) {
       empty_stdin();
       fgets(message, MAX_LEN, stdin);
 
-      for (int i = 0; i < num_students; i++) {
+      for (int i = 1; i <= num_students; i++) {
         sprintf(named_pipe, "pipes/p_student%d", i);
         fd = open(named_pipe, O_RDWR);
         write(fd, message, strlen(message) + 1);

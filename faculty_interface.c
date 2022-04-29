@@ -152,13 +152,11 @@ int main(int argc, char *argv[]) {
 
       printf("\nEnter the student number whose marks you want to undo: ");
       scanf("%d", &edit_student);
-      // printf("Student number chosen is %d\n", edit_student);
 
       // getting the filename
       char filename[MAX_LEN];
       sprintf(filename, "./data/data%d%d/data%d%d.txt", faculty_number,
               edit_student, faculty_number, edit_student);
-      // printf("Filename, %s\n", filename);
 
       char command_add[MAX_LEN];
 
@@ -175,12 +173,12 @@ int main(int argc, char *argv[]) {
         printf("Student no %d\t", i);
       }
       printf("\n");
+
       // Displaying the contents of the faculty files.
       for (int i = 1; i <= num_students; i++) {
         char filename[MAX_LEN];
         sprintf(filename, "./data/data%d%d/data%d%d.txt", faculty_number, i,
                 faculty_number, i);
-        // printf("Filename, %s\n", filename);
 
         FILE *ptr = fopen(filename, "r");
         if (ptr == NULL) {
