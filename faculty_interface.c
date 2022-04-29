@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 
   while (1) {
 
-    printf("1. Display marks\n");       // TODO: needs to be implemented
+    printf("1. Display marks\n"); // TODO: needs to be implemented
     printf("2. Edit marks table\n");
     printf("3. Undo edit operation\n");
     printf("4. View version history\n");
@@ -46,7 +46,8 @@ int main(int argc, char *argv[]) {
       printf("\n");
       for (int i = 1; i <= num_students; i++) {
         char filename[MAX_LEN];
-        sprintf(filename,"data/data%d%d/data%d%d.txt", faculty_number, i, faculty_number, i);
+        sprintf(filename, "data/data%d%d/data%d%d.txt", faculty_number, i,
+                faculty_number, i);
         FILE *fp = fopen(filename, "r");
         int marks;
         fscanf(fp, "%d", &marks);
@@ -54,15 +55,17 @@ int main(int argc, char *argv[]) {
       }
       printf("\n");
       break;
-    
+
     case 2: {
       int edit_student = 0;
 
-      // display in a row, all student numbers with names, and their marks given
+      // display in a row, all student numbers with names, and their marks
+      // given
       // by this faculty eg. student1 (Mohith)     student2 (Rita)
       //       89                        34
       // Enter the student no whos marks you want to edit:
-      // TODO: get names of students and number of students - either from system
+      // TODO: get names of students and number of students - either from
+      // system
       // calls or a meta data file
 
       for (int i = 1; i <= num_students; i++) {

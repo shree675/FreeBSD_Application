@@ -16,6 +16,9 @@ faculty:
 hod:
 	gcc -o hod_interface hod_interface.c utils.c -g
 
+editor:
+	gcc -o text_editor text_editor.c -g
+
 clean: clean.sh
 	sudo ./clean.sh
 	rm application student_interface hod_interface faculty_interface
