@@ -298,7 +298,7 @@ void processKeypress() {
     // write(STDOUT_FILENO, "\x1b[1D", 4);
     while (1) {
       c = readKey();
-      
+
       // if ESC key is pressed while in edit mode
       if (c == CTRL_KEY('[')) {
         write(STDOUT_FILENO, "\x1b[0m", 4);
@@ -356,9 +356,8 @@ void initialize() {
 }
 
 int main(int argc, char **argv) {
-  num_faculty = atoi(argv[1]);
-  num_students = atoi(argv[2]);
-
+  num_faculty = atoi(argv[0]);
+  num_students = atoi(argv[1]);
   enableRawMode();
   initialize();
   readFromFile();

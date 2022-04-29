@@ -2,6 +2,7 @@ install: utils.c application.c faculty_interface.c student_interface.c
 	make student
 	make faculty
 	make hod
+	make editor
 	gcc -o application application.c utils.c -g
 
 setup: setup.sh
