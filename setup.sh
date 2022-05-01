@@ -124,6 +124,12 @@ do
 	let "temp_i -= 1"
 done
 
+let "temp_i = num_faculty"
+while [ $temp_i -gt 0 ]
+do
+	setfacl -m u:faculty$i:rwx ..
+	let "temp_i -= 1"
+done
 # --------------------Creating named pipes------------------
 
 mkdir pipes
