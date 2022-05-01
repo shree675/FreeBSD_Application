@@ -136,16 +136,27 @@ void fillTable(struct writeBuffer *ab) {
   snprintf(information, sizeof(information),
            "Current cell: \x1b[47;1m\x1b[30;1m (faculty%d,student%d) \x1b[0m",
            x, y);
-  char faculty[4][5];
-  char student[4][5];
-  strcpy(faculty[0], "Fac1");
-  strcpy(faculty[1], "Fac2");
-  strcpy(faculty[2], "Fac3");
-  strcpy(faculty[3], "Fac4");
-  strcpy(student[0], "Stu1");
-  strcpy(student[1], "Stu2");
-  strcpy(student[2], "Stu3");
-  strcpy(student[3], "Stu4");
+  char faculty[num_faculty][5];
+  char student[num_students][5];
+  char concatStr[32];
+  for(int i=0;i<num_faculty;i++){
+  	snprintf(concatStr, sizeof(concatStr), "Fac%d", i);
+  	strcpy(faculty[i], concatStr);
+  	snprintf(concatStr, 32, "");
+  }
+  for(int i=0;i<num_students;i++){
+  	snprintf(concatStr, sizeof(concatStr), "Stu%d", i);
+  	strcpy(student[i], concatStr);
+  	snprintf(concatStr, 32, "");
+  }
+  // strcpy(faculty[0], "Fac1");
+  // strcpy(faculty[1], "Fac2");
+  // strcpy(faculty[2], "Fac3");
+  // strcpy(faculty[3], "Fac4");
+  // strcpy(student[0], "Stu1");
+  // strcpy(student[1], "Stu2");
+  // strcpy(student[2], "Stu3");
+  // strcpy(student[3], "Stu4");
   char totalString[MAXLEN] = "\x1b[37;1mTotal\x1b[0m";
   char empty[MAXLEN] = "      ";
   char fiveSpaces[MAXLEN] = "     ";
@@ -164,14 +175,14 @@ void fillTable(struct writeBuffer *ab) {
     appendBuf(ab, student[i], sizeof(student[i]));
     for (int j = 0; j < num_faculty; j++) {
       appendBuf(ab, fiveSpaces, sizeof(fiveSpaces));
-      appendBuf(ab, file[i][j], sizeof(file[i][j]));
+      appendBuf(ab, file[j][i], sizeof(file[j][i]));
     }
     appendBuf(ab, fiveSpaces, sizeof(fiveSpaces));
     sprintf(temp, "\x1b[37;1m%2d\x1b[0m", total[i]);
     appendBuf(ab, temp, sizeof(temp));
     appendBuf(ab, newLine, sizeof(newLine));
   }
-  if (y < 5) {
+  if (y < num_students + 1) {
     char instructions[MAXLEN] = {'\0'};
     appendBuf(ab, information, sizeof(information));
     appendBuf(ab, newLine, sizeof(newLine));
@@ -220,11 +231,11 @@ void moveCursor(int key) {
 void readFromFile() {
   FILE *fp;
   char buf[32];
-  for (int i = 1; i <= num_students; i++) {
-    for (int j = 1; j <= num_faculty; j++) {
+  for (int i = 1; i <= num_faculty; i++) {
+    for (int j = 1; j <= num_students; j++) {
       snprintf(buf, sizeof(buf), "data/data%d%d/data%d%d.txt", i, j, i, j);
       if ((fp = fopen(buf, "r")) == NULL) {
-        terminate("fopen");
+        terminate(buf);
       }
       fscanf(fp, "%s", file[i - 1][j - 1]);
       fclose(fp);
@@ -233,7 +244,7 @@ void readFromFile() {
   for (int i = 0; i < num_students; i++) {
     total[i] = 0;
     for (int j = 0; j < num_faculty; j++) {
-      total[i] = total[i] + (file[i][j][0] - 48);
+      total[i] = total[i] + (file[j][i][0] - 48);
     }
   }
 }
@@ -274,7 +285,7 @@ void processKeypress() {
   // ESC key
   case CTRL_KEY('['):
     E.cx = 0;
-    E.cy = 5;
+    E.cy = num_students + 1;
     refreshTable();
     exit(0);
     write(STDOUT_FILENO, "\x1b[0m", 4);
@@ -314,9 +325,9 @@ void processKeypress() {
         int x = (E.cx - 3) / 6;
         int y = E.cy;
         FILE *fp;
-        snprintf(buf, sizeof(buf), "data/data%d%d/data%d%d.txt", y, x, y, x);
+        snprintf(buf, sizeof(buf), "data/data%d%d/data%d%d.txt", x, y, x, y);
         if ((fp = fopen(buf, "w")) == NULL) {
-          terminate("fopen");
+          terminate(buf);
         }
         write(STDOUT_FILENO, ch, strlen(ch));
         // save the new value to the file
