@@ -130,6 +130,7 @@ do
 	setfacl -m u:faculty$i:rwx ..
 	let "temp_i -= 1"
 done
+setfacl -m u:hod:rwx ..
 # --------------------Creating named pipes------------------
 
 mkdir pipes

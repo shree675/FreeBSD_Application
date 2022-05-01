@@ -51,7 +51,8 @@ int main(int argc, char *argv[]) {
         FILE *fp = fopen(filename, "r");
         int marks;
         fscanf(fp, "%d", &marks);
-        printf("   %d     ", marks);
+        printf("%d         ", marks);
+
       }
       printf("\n");
       break;
@@ -86,7 +87,7 @@ int main(int argc, char *argv[]) {
         } else {
           char contents[MAX_LEN];
           fscanf(ptr, "%s", contents);
-          printf("%s\n", contents);
+          printf("%s", contents);
         }
         fclose(ptr);
         printf("\t\t");
