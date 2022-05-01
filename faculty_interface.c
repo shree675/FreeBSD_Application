@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
     case 4: {
       int edit_student = 0;
       for (int i = 1; i <= num_students; i++) {
-        printf("Student no %d\t", i);
+        printf("Student%d  ", i);
       }
       printf("\n");
 
@@ -190,10 +190,10 @@ int main(int argc, char *argv[]) {
         } else {
           char contents[MAX_LEN];
           fscanf(ptr, "%s", contents);
-          printf("%s\n", contents);
+          printf("%s         ", contents);
         }
         fclose(ptr);
-        printf("\t\t");
+        
       }
 
       printf("\nEnter the student number whose marks version history you want "
