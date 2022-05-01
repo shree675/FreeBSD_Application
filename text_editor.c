@@ -190,21 +190,6 @@ void fillTable(struct writeBuffer *ab) {
   }
 }
 
-// re-render the screen using buffer
-void refreshTable() {
-  struct writeBuffer ab = BUFFER_INIT;
-  appendBuf(&ab, "\x1b[H", 3);
-  if (normalMode) {
-    fillTable(&ab);
-  }
-  char buf[32];
-  // move cursor and display it
-  snprintf(buf, sizeof(buf), "\x1b[%d;%dH", E.cy + 1, E.cx + 1);
-  appendBuf(&ab, buf, strlen(buf));
-  write(STDOUT_FILENO, ab.b, ab.len);
-  free(ab.b);
-}
-
 // restrict cursor movement to 16 cells
 void moveCursor(int key) {
   switch (key) {
@@ -251,6 +236,22 @@ void readFromFile() {
       total[i] = total[i] + (file[i][j][0] - 48);
     }
   }
+}
+
+// re-render the screen using buffer
+void refreshTable() {
+  struct writeBuffer ab = BUFFER_INIT;
+  appendBuf(&ab, "\x1b[H", 3);
+  if (normalMode) {
+    readFromFile();
+    fillTable(&ab);
+  }
+  char buf[32];
+  // move cursor and display it
+  snprintf(buf, sizeof(buf), "\x1b[%d;%dH", E.cy + 1, E.cx + 1);
+  appendBuf(&ab, buf, strlen(buf));
+  write(STDOUT_FILENO, ab.b, ab.len);
+  free(ab.b);
 }
 
 void processKeypress() {

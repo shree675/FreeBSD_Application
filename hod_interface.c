@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
@@ -69,74 +70,17 @@ int main(int argc, char *argv[]) {
 
       sprintf(num_student_arg, "%d", num_students);
       sprintf(num_faculty_arg, "%d", num_faculty);
-      if (execl("text_editor", num_faculty_arg, num_student_arg, NULL) == -1) {
-        perror("In text editor execl : ");
-        exit(1);
-      };
-      // int edit_student = 0;
-      // int edit_row = 0;
 
-      // printf("\t\t");
-      // for (int i = 1; i <= num_students; i++) {
-      //   printf("Student %d | ", i);
-      // }
-      // printf("\n");
-      // // Displaying the contents of all files
-      // for (int i = 1; i <= num_faculty; i++) {
-      //   printf("Faculty %d:  \t", i);
-      //   for (int j = 1; j <= num_students; j++) {
-      //     char filename[MAX_LEN];
-      //     sprintf(filename, "./data/data%d%d/data%d%d.txt", i, j, i, j);
-      //     FILE *ptr = fopen(filename, "r");
-      //     if (ptr == NULL) {
-      //       printf("File could not be opened");
-
-      //     } else {
-      //       char ch = fgetc(ptr);
-      //       while (ch != EOF && ch != '\n') {
-      //         printf("%c", ch);
-      //         ch = fgetc(ptr);
-      //       }
-      //     }
-      //     fclose(ptr);
-      //     printf("\t\t");
-      //   }
-      //   printf("\n");
-      // }
-      // printf("-----------------------------------------------------------------"
-      //        "----------------------------------\n");
-
-      // printf("\nEnter the student number whose marks you want to edit: ");
-      // scanf("%d", &edit_student);
-      // printf("\nEnter the row number where you want to edit marks: ");
-      // scanf("%d", &edit_row);
-      // printf("\nEnter the updated marks : ");
-      // int updated_marks = 0;
-      // scanf("%d", &updated_marks);
-
-      // // getting the filename
-      // char filename[MAX_LEN];
-      // sprintf(filename, "./data/data%d%d/data%d%d.txt", edit_row,
-      // edit_student,
-      //         edit_row, edit_student);
-      // // printf("Filename, %s\n", filename);
-
-      // // writing the updated marks to the file
-      // FILE *ptr = fopen(filename, "w");
-      // if (ptr == NULL) {
-      //   printf("file could not be opened\n");
-      // }
-      // fprintf(ptr, "%d", updated_marks);
-      // fclose(ptr);
-
-      // char command_add[MAX_LEN];
-      // sprintf(command_add,
-      //         "cd data/data%d%d/ && git add data%d%d.txt && git commit -m "
-      //         "\"updated data file\" && cd .. && cd ..",
-      //         edit_row, edit_student, edit_row, edit_student);
-      // popen(command_add, "r");
-      // printf("Marks updated\n");
-      // break;
+      if (fork()) {
+        wait(0);
+        break;
+      } else {
+        if (execl("text_editor", num_faculty_arg, num_student_arg, NULL) ==
+            -1) {
+          perror("In text editor execl : ");
+          exit(1);
+        };
+      }
     }
     case 3: {
       printf("Displaying Overall Statistics\n");
