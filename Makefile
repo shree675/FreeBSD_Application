@@ -19,6 +19,9 @@ hod:
 
 editor:
 	gcc -o text_editor text_editor.c -g
+	
+dtrace:
+	dtrace -o log.txt -s trace.d
 
 clean: clean.sh
 	sudo ./clean.sh

@@ -1,0 +1,238 @@
+CPU     ID                    FUNCTION:NAME
+  0  66768                       open:entry gid:1009, executable:application, pid:991, uid:1009, open:/etc/libmap.conf
+----------------------------------------------------
+
+  0  66764                       read:entry exec:application
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:application, pid:991, uid:1009, open:/usr/local/etc/libmap.d
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:application, pid:991, uid:1009, open:/usr/local/etc/libmap.d/mesa.conf
+----------------------------------------------------
+
+  0  66764                       read:entry exec:application
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:application, pid:991, uid:1009, open:/var/run/ld-elf.so.hints
+----------------------------------------------------
+
+  0  66764                       read:entry exec:application
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:application, pid:991, uid:1009, open:/lib/libc.so.7
+----------------------------------------------------
+
+  0  66766                      write:entry exec:application
+----------------------------------------------------
+
+  0  66766                      write:entry exec:application
+----------------------------------------------------
+
+  0  66766                      write:entry exec:application
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:application, pid:991, uid:1009, open:/etc/nsswitch.conf
+----------------------------------------------------
+
+  0  66764                       read:entry exec:application
+----------------------------------------------------
+
+  0  66764                       read:entry exec:application
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:application, pid:991, uid:1009, open:/etc/pwd.db
+----------------------------------------------------
+
+  0  66764                       read:entry exec:application
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:application, pid:991, uid:1009, open:/etc/group
+----------------------------------------------------
+
+  0  66764                       read:entry exec:application
+----------------------------------------------------
+
+  0  66764                       read:entry exec:application
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:application, pid:991, uid:1009, open:/etc/group
+----------------------------------------------------
+
+  0  66764                       read:entry exec:application
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:application, pid:991, uid:1009, open:/etc/group
+----------------------------------------------------
+
+  0  66764                       read:entry exec:application
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:application, pid:991, uid:1009, open:/etc/group
+----------------------------------------------------
+
+  0  66764                       read:entry exec:application
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:application, pid:991, uid:1009, open:/etc/group
+----------------------------------------------------
+
+  0  66764                       read:entry exec:application
+----------------------------------------------------
+
+  0  65065                        none:exec student_interface
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:student_interface, pid:991, uid:1009, open:/etc/libmap.conf
+----------------------------------------------------
+
+  0  66764                       read:entry exec:student_interface
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:student_interface, pid:991, uid:1009, open:/usr/local/etc/libmap.d
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:student_interface, pid:991, uid:1009, open:/usr/local/etc/libmap.d/mesa.conf
+----------------------------------------------------
+
+  0  66764                       read:entry exec:student_interface
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:student_interface, pid:991, uid:1009, open:/var/run/ld-elf.so.hints
+----------------------------------------------------
+
+  0  66764                       read:entry exec:student_interface
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:student_interface, pid:991, uid:1009, open:/lib/libc.so.7
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:student_interface, pid:991, uid:1009, open:/etc/nsswitch.conf
+----------------------------------------------------
+
+  0  66764                       read:entry exec:student_interface
+----------------------------------------------------
+
+  0  66764                       read:entry exec:student_interface
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:student_interface, pid:991, uid:1009, open:/etc/group
+----------------------------------------------------
+
+  0  66764                       read:entry exec:student_interface
+----------------------------------------------------
+
+  0  65069                      none:create fork in student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66764                       read:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66824                     access:entry executable:student_interface, pid:991, uid:1009, access:data/data11/data11.txt
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:student_interface, pid:991, uid:1009, open:data/data11/data11.txt
+----------------------------------------------------
+
+  0  66764                       read:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66824                     access:entry executable:student_interface, pid:991, uid:1009, access:data/data21/data21.txt
+----------------------------------------------------
+
+  0  66768                       open:entry gid:1009, executable:student_interface, pid:991, uid:1009, open:data/data21/data21.txt
+----------------------------------------------------
+
+  0  66764                       read:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  66764                       read:entry exec:student_interface
+----------------------------------------------------
+
+  0  66766                      write:entry exec:student_interface
+----------------------------------------------------
+
+  0  65068                        none:exit 2
+----------------------------------------------------
+
+  0  65068                        none:exit 1
+----------------------------------------------------
+
+
+
+  execve                                                            1
+  exit                                                              1
+  fork                                                              1
+  geteuid                                                           1
+  getuid                                                            1
+  kqueue                                                            1
+  openat                                                            1
+  sigaction                                                         1
+  __sysctl                                                          2
+  access                                                            2
+  fcntl                                                             2
+  fstatat                                                           2
+  kevent                                                            2
+  lseek                                                             2
+  munmap                                                            2
+  readlink                                                          2
+  sigfastblock                                                      2
+  ioctl                                                             3
+  getdirentries                                                     4
+  issetugid                                                         4
+  mprotect                                                          8
+  pread                                                            10
+  write                                                            20
+  close                                                            21
+  open                                                             21
+  fstat                                                            22
+  mmap                                                             22
+  read                                                             22
